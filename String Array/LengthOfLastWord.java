@@ -1,4 +1,4 @@
-class Solution {
+class LengthOfLastWord {
     public int lengthOfLastWord(String s) {
         char[] charS = s.trim().toCharArray();
         for (int i = charS.length - 1; i >= 0; i--) {

@@ -1,4 +1,7 @@
-class Solution {
+import java.util.HashMap;
+import java.util.Map;
+
+public class MinimumWindowSubStringFailed {
     public String minWindow(String s, String t) {
         if (s == null || t == null || s.length() < t.length() || t.length() == 0 || s.length() == 0) {
             return "";

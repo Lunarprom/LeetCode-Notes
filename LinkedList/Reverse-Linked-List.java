@@ -6,7 +6,7 @@
  *     ListNode(int x) { val = x; }
  * }
  */
-// TODO: Implement Solution 2
+// TODO: Implement LeetCodeHasPathSum 2
 // TODO: Implement this in recursion way
 class Solution {
     // Solution 1： 先断开再连上

@@ -6,7 +6,7 @@ public class LC31NextPermutation {
 	 * Runtime: 0 ms, faster than 100.00% of Java online submissions for Next Permutation.
 	 * Memory Usage: 39.4 MB, less than 50.00% of Java online submissions for Next Permutation.
 	 */
-	class Solution {
+	class NonDFSSolution {
 	    public void nextPermutation(int[] nums) {
 	        int len = nums.length;
 	        if (len <= 1) {

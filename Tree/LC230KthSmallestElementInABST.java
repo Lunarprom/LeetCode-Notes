@@ -13,7 +13,7 @@ import java.util.Stack;
  * Binary Tree worst time complexity is always O(h) (When h = N)
  * Follow up: optimization-
  */
-public class LeetCode230KthSmallestElementInABST {
+public class LC230KthSmallestElementInABST {
 
     class solutionUsingAList {
         /**
@@ -46,30 +46,33 @@ public class LeetCode230KthSmallestElementInABST {
         }
     }
 
-    class InorderTraversalRecursion {
-        int result;
+    /**
+     * Resursion solution using inorder traversal
+     * Runtime: 1 ms, faster than 34.77% of Java online submissions for Kth Smallest Element in a BST.
+     * Memory Usage: 42.3 MB, less than 5.51% of Java online submissions for Kth Smallest Element in a BST.
+     */
+    class InorderTraversalRecursionSolution {
         int count;
-        /**
-         * Inorder traversal
-         */
+        int result;
         public int kthSmallest(TreeNode root, int k) {
-            result = Integer.MAX_VALUE;
-            count = 0;
-            inorder(root, k);
+            count = k;
+            result = -1;
+            inorderTraversal(root);
+            
             return result;
         }
-
-        private void inorder(TreeNode root, int k) {
+        
+        private void inorderTraversal(TreeNode root) {
             if (root == null) {
                 return;
             }
-            inorder(root.left, k);
-            count++;
-            if (count == k) {
+            inorderTraversal(root.left);
+            --count;
+            if (count == 0) {
                 result = root.val;
                 return;
             }
-            inorder(root.right, k);
+            inorderTraversal(root.right);
         }
     }
 

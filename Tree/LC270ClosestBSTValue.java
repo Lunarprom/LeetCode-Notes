@@ -51,6 +51,21 @@ public class LC270ClosestBSTValue {
 	    }
 	}
 
+	class BinarySearchIterationSolution {
+	    public int closestValue(TreeNode root, double target) {
+	        if (root == null) {
+	            return Integer.MIN_VALUE;
+	        }
+	        int closest = root.val;
+	        while (root != null) {
+	            closest = Math.abs(root.val - target) < Math.abs(closest - target) ? root.val : closest;
+	            root = root.val > target ? root.left : root.right;
+	        }
+	        
+	        return closest;
+	    }
+	}
+
 	class TreeNode {
 		int val;
 		TreeNode left;

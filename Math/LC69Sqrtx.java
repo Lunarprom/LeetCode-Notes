@@ -5,6 +5,8 @@ public class LC69Sqrtx {
 	            return x;
 	        }
 	        long left = 0;
+	        // 如果一个数的一半的平方大于它自己，那么这个数的取值范围。解以上不等式得a ≥4或者a ≤ 0
+	        // 对 0、1、2、3 分别计算结果，很容易知道，这 4 个数的平方根依次是 0、1、1、1
 	        long right = x / 2;
 	        while (left < right) {
 	            // 向右取中数，否则会死循环 e.g. x = 4

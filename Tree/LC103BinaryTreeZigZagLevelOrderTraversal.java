@@ -1,4 +1,8 @@
 public class LC103BinaryTreeZigZagLevelOrderTraversal {
+    /**
+     * 利用了LinkedList的双端队列性质。用level的奇偶性来track增加的地方。
+     * 要是不让用双端队列的话就reverse。多一个O(NLogN)的操作。
+     */
     class BFSSolution {
         public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
             List<List<Integer>> result = new LinkedList<>();

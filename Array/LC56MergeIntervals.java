@@ -33,8 +33,7 @@ public class LC56MergeIntervals {
 	/**
 	 * Two pointers solution. points to the intervals and keep updating the value 
 	 * before adding the interval to the list.
-	 * Runtime: 5 ms, faster than 93.43% of Java online submissions for Merge Intervals.
-	 * Memory Usage: 41.9 MB, less than 49.28% of Java online submissions for Merge Intervals.
+	 * 排序是O(NLogN)，扫描是O(N)
 	 */
 	class Solution {
 	    public int[][] merge(int[][] intervals) {
@@ -42,35 +41,25 @@ public class LC56MergeIntervals {
 	            return intervals;
 	        }
 	        Arrays.sort(intervals, new Comparator<int[]>() {
-	           @Override
+	            @Override
 	            public int compare(int[] int1, int[] int2) {
 	                return int1[0] - int2[0];
 	            }
 	        });
-	        
-	        int len = intervals.length;
-	        int[] start = new int[len];
-	        int[] end = new int[len];
-	        for (int i = 0; i < len; i++) {
-	            start[i] = intervals[i][0];
-	            end[i] = intervals[i][1];
-	        }
-	        
-	        // [1,2,8,15]
-	        // [3,6,10,18]
+	            
 	        LinkedList<int[]> result = new LinkedList<>();
-	        int startValue = intervals[0][0];
-	        int endValue = intervals[0][1];
-	        for (int i = 0; i < len - 1; i++) {
-	            if (intervals[i + 1][0] <= endValue) {
-	                endValue = Math.max(intervals[i + 1][1], endValue);
+	        int startTime = intervals[0][0];
+	        int endTime = intervals[0][1];
+	        for (int i = 1; i < intervals.length; i++) {
+	            if (intervals[i][0] <= endTime) {
+	                endTime = Math.max(intervals[i][1], endTime);
 	            } else {
-	                result.add(new int[]{startValue, endValue});
-	                startValue = intervals[i + 1][0];
-	                endValue = intervals[i + 1][1];
+	                result.add(new int[]{startTime, endTime});
+	                startTime = intervals[i][0];
+	                endTime = intervals[i][1];
 	            }
 	        }
-	        result.add(new int[]{startValue, endValue});
+	        result.add(new int[]{startTime, endTime});
 	        
 	        return result.toArray(new int[result.size()][]);
 	    }

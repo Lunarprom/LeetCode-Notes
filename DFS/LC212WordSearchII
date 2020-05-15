@@ -1,0 +1,89 @@
+public class LC212WordSearchII {
+	/**
+	 * 思路: 建字典树把所有的words都放进去，backtrack搜索的时候检查当前字符对应的字典树节点有没有可用的单词(即`TrieNode.word != null`)
+	 * 1. 建字典树
+	 * 2. 对棋盘格上的每个字符做DFS（如果首字母就不符合就没必要进行了）
+	 * 3. DFS中如果当前TrieNode就包含有效字符，就先加进去，然后再去掉（去重）
+	 * 4. 标记当前的字符为一个无效字符以避免重复搜索，对邻接的四个方向的字符都再进行一轮DFS。
+	 * 5. 找完之后就把找到的字符去掉避免重复搜索。
+	 */
+	class Solution {
+	    
+	    int[] dx = {0, 1, -1, 0};
+	    int[] dy = {1, 0, 0, -1};
+	    TrieNode trie;
+	    List<String> result;
+	    
+	    public List<String> findWords(char[][] board, String[] words) {
+	        result = new ArrayList<>();
+	        trie = new TrieNode();
+	        for (String word : words) {
+	            trie.insert(word, 0);
+	        }
+	        int m = board.length;
+	        int n = board[0].length;
+	        for (int i = 0; i < m; i++) {
+	            for (int j = 0; j < n; j++) {
+	                if (trie.children.containsKey(board[i][j])) {
+	                    dfs(board, i, j, trie);
+	                }
+	            }
+	        }
+	        
+	        return result;
+	    }
+	    
+	    private void dfs(char[][] board, int x, int y, TrieNode parent) {
+	        char ch = board[x][y];
+	        TrieNode currNode = parent.children.get(ch);
+	        if (currNode != null && currNode.word != null) {
+	            result.add(currNode.word);
+	            currNode.word = null; // remove dupes.
+	        }
+	        board[x][y] = '#';
+	        for (int i = 0; i < dx.length; i++) {
+	            int nx = x + dx[i];
+	            int ny = y + dy[i];
+	            if (!isValid(nx, ny, board.length, board[0].length)) {
+	                continue;
+	            }
+	            if (currNode.children.containsKey(board[nx][ny])) {
+	                dfs(board, nx, ny, currNode);
+	            }
+	        }
+	        
+	        board[x][y] = ch;
+	        
+	        // Optimization
+	        if (currNode.children.isEmpty()) {
+	            parent.children.remove(currNode);
+	        }
+	    }
+	    
+	    private boolean isValid(int x, int y, int m, int n) {
+	        return x >= 0 && x < m && y >= 0 && y < n;
+	    }
+	}
+
+	public class TrieNode {
+	    Map<Character, TrieNode> children;
+	    String word;
+	    
+	    public TrieNode() {
+	        children = new HashMap<>();
+	        word = null;
+	    }
+	    
+	    public void insert(String s, int index) {
+	        if (index == s.length()) {
+	            this.word = s;
+	            return;
+	        }
+	        char curr = s.charAt(index);
+	        if (!children.containsKey(curr)) {
+	            children.put(curr,new TrieNode());
+	        }
+	        children.get(curr).insert(s, index + 1);
+	    }
+	}
+}

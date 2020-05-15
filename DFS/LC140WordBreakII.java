@@ -1,42 +1,30 @@
 public class LC140WordBreakII {
 	/**
-	 * Memoization+DFS
-	 * Runtime: 11 ms, faster than 48.64% of Java online submissions for Word Break II.
-	 * Memory Usage: 40 MB, less than 16.40% of Java online submissions for Word Break II.
+	 * Memoized DFS
+	 * Time complexity: O(2^N) while N is the length of the Strings. Considering the worst case string = "aaaaaaa" and every prefix of the string is in the dictionary, the list of string the algorithm desires is basically generating all combinations of the space existence between any two characters. So it is at least O(2^N) because you need at least 2^n strings in the result list. 
+	 * In this case, space complexity is also O(2^N) for the recursion stack.
 	 */
-	class Solution {
+	class MemoizedDFSSolution {
 	    public List<String> wordBreak(String s, List<String> wordDict) {
-	        List<String> result = new ArrayList<>();
-	        if (s == null || s.length() == 0) {
-	            return result;
-	        }
-	        Set<String> dict = new HashSet<String>(wordDict);
-	        Map<String, List<String>> memo = new HashMap<>();
-	        return helper(s, dict, memo);
+	        return dfs(s, wordDict, new HashMap<String, List<String>>());
 	    }
 	    
-	    private List<String> helper(String s,
-	                                Set<String> dict,
-	                                Map<String, List<String>> memo) {
+	    private List<String> dfs(String s, List<String> wordDict, Map<String, List<String>> memo) {
 	        if (memo.containsKey(s)) {
 	            return memo.get(s);
 	        }
 	        List<String> result = new ArrayList<>();
-	        if (s.length() == 0) {
-	            return result;
-	        }
-	        if (dict.contains(s)) {
-	            result.add(s);
-	        }
-	        for (int i = 1; i < s.length(); i++) {
-	            String word = s.substring(0, i);
-	            if (!dict.contains(word)) {
-	                continue;
-	            }
-	            String suffix = s.substring(i);
-	            List<String> sufSegments = helper(suffix, dict, memo);
-	            for (String segment : sufSegments) {
-	                result.add(word + " " + segment);
+	        for (String word : wordDict) {
+	            if (s.startsWith(word)) {
+	                String substring = s.substring(word.length());
+	                if (substring.length() == 0) {
+	                    result.add(word);
+	                } else {
+	                    List<String> nextWords = dfs(substring, wordDict, memo);
+	                    for (String nextWord : nextWords) {
+	                        result.add(word + " " + nextWord);
+	                    }
+	                }
 	            }
 	        }
 	        

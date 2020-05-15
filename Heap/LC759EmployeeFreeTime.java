@@ -1,4 +1,4 @@
-public class LC759EmployeeFreeTime {
+ public class LC759EmployeeFreeTime {
 	/*
 	// Definition for an Interval.
 	class Interval {

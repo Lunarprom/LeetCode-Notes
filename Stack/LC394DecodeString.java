@@ -1,38 +1,39 @@
 public class LC394DecodeString {
-	class StackIterationSolution {
+	/**
+	 *  用栈来做:
+	 *	1.如果字符是字母，加到StringBuilder;
+	 *  2.如果是数字，就更新数字（原本的乘以10再加上当前的个位数）
+	 *  3.如果是左括号[,就把数字压到栈里去,StringBuilder curr也变成字符串（candidate of result)压进栈里，再新建一个SB
+	 *  4.如果是右括号,说明当前的完事了，用一个tmp接着当前的curr（待重复的）。弹出数字，弹出字符串用curr接着（这是全局字符串candidate of result),
+	 * 		然后按次数重复tmp，append到curr后面。
+	 */
+	class StackSolution {
 	    public String decodeString(String s) {
-	        if (s == null || s.length() == 0) {
-	            return s;
-	        }
-	        StringBuilder sb = new StringBuilder();
-	        LinkedList<Integer> timeStack = new LinkedList<>();
-	        LinkedList<String> resultStack = new LinkedList<>();
-	        int times = 0;
-	        for (int i = 0; i < s.length(); i++) {
-	            char c = s.charAt(i);
-	            if (c >= '0' && c <= '9') {
-	                times = times * 10 + c - '0';
-	            } else if (c == '[') {
-	                if (times > 0) {
-	                    timeStack.addLast(times);
+	        Stack<Integer> cntStack = new Stack<>();
+	        Stack<StringBuilder> strStack = new Stack<>();
+	        StringBuilder curr = new StringBuilder();
+	        int count = 0;
+	        for (char ch : s.toCharArray()) {
+	            if (Character.isDigit(ch)) {
+	                count = count * 10 + ch - '0';
+	            } else if (ch == '[') {
+	                cntStack.push(count);
+	                count = 0;
+	                strStack.push(curr);
+	                curr = new StringBuilder();
+	            } else if (ch == ']') {
+	                StringBuilder tmp = curr;
+	                curr = strStack.pop();
+	                int times = cntStack.pop();
+	                for (int i = 0; i < times; i++) {
+	                    curr.append(tmp);
 	                }
-	                resultStack.addLast(sb.toString());
-	                // Finish up the previous String piece and initialze the current counter.
-	                times = 0;
-	                sb = new StringBuilder();
-	            } else if (c == ']') {
-	                StringBuilder tmp = new StringBuilder().append(resultStack.removeLast());
-	                int currTimes = timeStack.removeLast();
-	                for (int j = 0; j < currTimes; j++) {
-	                    tmp.append(sb); // Attach the current String piece to the tmp StringBuilder for dedicated times.
-	                }
-	                sb = tmp;
 	            } else {
-	                sb.append(c);
+	                curr.append(ch);
 	            }
 	        }
 	        
-	        return sb.toString();
+	        return curr.toString();
 	    }
 	}
 

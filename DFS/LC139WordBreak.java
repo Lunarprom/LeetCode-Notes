@@ -1,4 +1,26 @@
 public class LC139WordBreak {
+
+	/**
+	 * dp[i] 取决于第j个字符和j~i之间substring的状态
+	 */
+	class DPSolution {
+	    public boolean wordBreak(String s, List<String> wordDict) {
+	        Set<String> dict = new HashSet<>(wordDict);
+	        boolean[] dp = new boolean[s.length() + 1];
+	        dp[0] = true;
+	        for (int i = 1; i <= s.length(); i++) {
+	            for (int j = 0; j < i; j++) {
+	                if (dp[j] && dict.contains(s.substring(j, i))) {
+	                    dp[i] = true;
+	                    break;
+	                }
+	            }
+	        }
+	        
+	        return dp[s.length()];
+	    }
+	}
+
 	/**
 	 * Added memoization for DFS.
 	 * Runtime: 5 ms, faster than 78.94% of Java online submissions for Word Break.

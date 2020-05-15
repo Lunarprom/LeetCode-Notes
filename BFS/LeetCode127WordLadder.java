@@ -1,5 +1,69 @@
 class LeetCode127WordLadder {
 
+    class OptimizedBiDirectionalBFSSolution {
+        // 理解如何用Set来做BFS
+        public int ladderLength(String beginWord, String endWord, List<String> wordList) {
+            Set<String> dict = new HashSet<>(wordList);
+            // If endWord is not in the dict then there is no such transformation.
+            if (!dict.contains(endWord)) {
+                return 0;
+            }
+            Set<String> stSet = new HashSet<>();
+            Set<String> endSet = new HashSet<>();
+            Set<String> tmp = new HashSet<>();
+            int count = 1;
+            stSet.add(beginWord);
+            endSet.add(endWord);
+            
+            Set<String> visited = new HashSet<>();
+            while (!stSet.isEmpty() && !endSet.isEmpty()) {
+                count++;
+                // Swap two sets to improve the search performance.
+                if (stSet.size() > endSet.size()) {
+                    tmp = stSet;
+                    stSet = endSet;
+                    endSet = tmp;
+                }
+                tmp = new HashSet<>();
+                for (String curr : stSet) {
+                    Set<String> neighbors = getNeighbors(curr, dict);
+                    for (String next : neighbors) {
+                        if (endSet.contains(next)) {
+                            return count;
+                        }
+                        if (!visited.contains(next) && dict.contains(next)) {
+                            tmp.add(next);
+                            visited.add(next);
+                        }
+                    }
+                }
+                stSet = tmp;
+            }
+            
+            return 0;
+        }
+        
+        private Set<String> getNeighbors(String word, Set<String> dict) {
+            Set<String> neighbors = new HashSet<>();
+            char[] chars = word.toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                char curr = chars[i];
+                for (char j = 'a'; j <= 'z'; j++) {
+                    chars[i] = j;
+                    String next = String.valueOf(chars);
+                    if (!next.equals(word) && dict.contains(next)) {
+                        neighbors.add(next);
+                    }
+                    // resume the original char Array.
+                    chars[i] = curr;
+                }
+            }
+            
+            return neighbors;
+        }
+    }
+
+
     class Solution1 {
         /**
          * Solution 1: Brute force BFS
